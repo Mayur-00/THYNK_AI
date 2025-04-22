@@ -1,0 +1,88 @@
+import UserModel from "@/app/models/user.model";
+import { dbConnect } from "@/lib/dbConnect";
+import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+
+export async function POST(request: NextRequest) {
+  // db connection fucntion
+  await dbConnect();
+
+  try {
+    const { username, email, password } = await request.json();
+
+    // if check for empty request parameter
+    if (!username || !email || !password) {
+      console.log("All the Paremeters are required!");
+      return NextResponse.json(
+        {
+          success: false,
+          message: "All the Paremeters are required!",
+        },
+        { status: 400 }
+      );
+    }
+
+    // check for existing user by email
+    const existingUser = await UserModel.findOne({ email: email });
+
+    if (existingUser) {
+      console.log("User already exist !");
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User Already Exists !",
+        },
+        { status: 409 }
+      );
+    }
+    // password hashing
+    const salt = await bcrypt.genSalt(5);
+    const hashedPass = await bcrypt.hash(password, salt);
+
+    // new user generation
+    const newUser = new UserModel({
+      username,
+      email,
+      password: hashedPass,
+    });
+
+    const savedUser = await newUser.save();
+
+    // cookie object
+    const tokenObj ={
+        userid : savedUser._id,
+        username: savedUser.username,
+      };
+      // signing jwt
+      const token = jwt.sign(tokenObj,process.env.JWT_SECRET!, {expiresIn:"2d"} );
+
+      //response object
+    const response = NextResponse.json(
+      {
+        message: "user registered successfully",
+        sucees: true,
+        savedUser,
+      },
+      {
+        status: 200,
+      }
+    );
+    //cookie set
+    response.cookies.set("token", token);
+
+    return response;
+  } catch (error) {
+    console.log("error in signup function", error);
+
+    return NextResponse.json(
+      {
+        message: "An Error Occured while regestering user",
+        sucees: false,
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}

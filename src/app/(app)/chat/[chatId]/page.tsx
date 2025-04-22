@@ -1,0 +1,151 @@
+// app/chat/[chatId]/page.tsx
+"use client";
+
+import ChatBubble from "@/components/ChatBubble";
+import InputComponent from "@/components/InputComponent";
+import React, { useEffect, useRef, useState } from "react";
+import { ChatMessage } from "@/types/ChatMessage";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getHistoryChats, sendMessage } from "@/lib/ChatFunctions/api";
+import { useRouter } from "next/navigation";
+
+const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  
+  // Unwrap the params
+  const { chatId: paramChatId } = React.use(params);
+  const isNewChat = paramChatId === "new";
+
+  // Fetching chat history (only if not a new chat)
+  const { data: chatHistory, isLoading, error } = useQuery({
+    queryKey: ["chats", paramChatId],
+    queryFn: () => getHistoryChats(paramChatId),
+    enabled: !!paramChatId && !isNewChat, // Don't fetch for "new" chat
+  });
+
+  // Mutation for sending a new message
+  const mutation = useMutation({
+    mutationFn: sendMessage,
+  });
+
+  // Function to scroll to the bottom of the chat
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      const container = chatContainerRef.current;
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleSubmit = async (message: string) => {
+    // Check if we're in the "new" chat page
+    if (isNewChat) {
+      // Create a new chat with this first message
+      mutation.mutate(
+        {
+          message,
+          history: [], // No history for a new chat
+          chatId: "newChat",
+        },
+        {
+          onSuccess: (data) => {
+            // Navigate to the new chat page with the returned chatId
+            if (data.chatId) {
+              router.push(`/chat/${data.chatId}`);
+            }
+          },
+        }
+      );
+    } else {
+      // We're in an existing chat, add messages normally
+      const newUserMessage = {
+        role: "user",
+        content: message,
+      };
+      
+      // Add user message
+      setMessages((prev) => [...prev, newUserMessage]);
+      
+      // Add an empty model message as a placeholder for loading
+      setMessages((prev) => [...prev, { role: "model", content: "" }]);
+
+      // Scroll to bottom immediately when user sends a message
+      setTimeout(scrollToBottom, 50);
+
+      mutation.mutate(
+        {
+          message,
+          history: messages,
+          chatId: paramChatId,
+        },
+        {
+          onSuccess: (data) => {
+            // Replace the empty message with the actual response
+            setMessages((prev) => {
+              const newMessages = [...prev];
+              newMessages[newMessages.length - 1] = { role: "model", content: data.reply };
+              return newMessages;
+            });
+            
+            // Scroll to bottom again when response is received
+            setTimeout(scrollToBottom, 50);
+          },
+        }
+      );
+    }
+  };
+
+  // Set initial chat history on load and scroll to bottom
+  useEffect(() => {
+    if (chatHistory && !isNewChat) {
+      setMessages(chatHistory);
+      // Initial scroll to bottom after loading chat history
+      setTimeout(scrollToBottom, 100);
+    }
+  }, [chatHistory, isNewChat]);
+
+  // Additional useEffect to handle scrolling when messages change
+  useEffect(() => {
+    if (messages.length > 0) {
+      // Small delay to ensure DOM has updated
+      setTimeout(scrollToBottom, 50);
+    }
+  }, [messages.length]);
+
+  // Skip loading state for new chats
+  if (isLoading && !isNewChat) return <div>Loading...</div>;
+  if (error && !isNewChat) return <div>Error loading chat history</div>;
+
+  return (
+    <div className="bg-white sm:h-screen sm:w-screen h-full w-full flex flex-col items-center gap-2 sm:gap-5">
+      <div
+        ref={chatContainerRef}
+        className="sm:h-160 sm:w-200 h-full w-full overflow-y-scroll flex flex-col gap-2 sm:gap-5 p-2 sm:p-5 relative"
+      >
+        {messages.length > 0 ? (
+          messages.map((message, index) => (
+            <ChatBubble 
+              key={index} 
+              content={message} 
+              error={mutation.error}
+              isLoading={mutation.isPending && index === messages.length - 1 && message.role === "model" && message.content === ""} 
+            />
+          ))
+        ) : (
+          <div className="text-center text-gray-500 py-10">
+            {isNewChat ? "Start a new conversation" : "No messages in this chat yet"}
+          </div>
+        )}
+      </div>
+      <div className="w-full p-2 sm:p-5">
+        <InputComponent onSendMessage={handleSubmit} />
+      </div>
+    </div>
+  );
+};
+
+export default Page;
