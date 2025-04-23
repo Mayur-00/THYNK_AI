@@ -105,6 +105,12 @@ const ChatBubble: React.FC<Props> = ({ content, error, isLoading }) => {
         {content.role === "tool_outputs" && (
           <div className="text-xs text-green-500 italic mt-1">Output</div>
         )}
+          {error && (
+            <div className="flex space-x-2 items-center p-2">
+            <div className="text-gray-500"> {error.message}</div>
+  
+          </div>
+          )}
       </div>
     </div>
   );

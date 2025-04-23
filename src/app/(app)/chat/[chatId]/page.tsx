@@ -8,6 +8,7 @@ import { ChatMessage } from "@/types/ChatMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getHistoryChats, sendMessage } from "@/lib/ChatFunctions/api";
 import { useRouter } from "next/navigation";
+import PageLoaderComponent from "@/components/PageLoaderComponent";
 
 const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -19,10 +20,12 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   const isNewChat = paramChatId === "new";
 
   // Fetching chat history (only if not a new chat)
-  const { data: chatHistory, isLoading, error } = useQuery({
+  const { data: chatHistory, isLoading, error, isError } = useQuery({
     queryKey: ["chats", paramChatId],
     queryFn: () => getHistoryChats(paramChatId),
     enabled: !!paramChatId && !isNewChat, // Don't fetch for "new" chat
+    retry:2,
+   
   });
 
   // Mutation for sending a new message
@@ -117,8 +120,8 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   }, [messages.length]);
 
   // Skip loading state for new chats
-  if (isLoading && !isNewChat) return <div>Loading...</div>;
-  if (error && !isNewChat) return <div>Error loading chat history</div>;
+
+  if (isLoading && !isNewChat) return <PageLoaderComponent/>;
 
   return (
     <div className="bg-white sm:h-screen sm:w-screen h-full w-full flex flex-col items-center gap-2 sm:gap-5">
