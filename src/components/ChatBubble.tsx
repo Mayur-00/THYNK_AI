@@ -48,7 +48,7 @@ const ChatBubble: React.FC<Props> = ({ content, error, isLoading }) => {
       >
         {isLoadingBubble ? (
           <div className="flex space-x-2 items-center p-2">
-            <div className="text-gray-500">Claude is thinking</div>
+            <div className="text-gray-500"> THYNKING</div>
             <div className="flex space-x-1">
               {[0, 1, 2].map((index) => (
                 <div 

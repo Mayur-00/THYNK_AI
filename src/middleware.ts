@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     const isPublic = path ==="/sign-in" || path === "/sign-up" || path ==="/verifyemail" || path ==="/"
 
     if(isPublic && token){
-        return NextResponse.redirect(new URL('/chat', request.url))
+        return NextResponse.redirect(new URL('/chat/new', request.url))
         return NextResponse.next();
     }
     if(!isPublic && token){
