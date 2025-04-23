@@ -7,8 +7,18 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   await dbConnect();
   try {
-    const { decoded } = await getDataFromToken(request);
-    const userid = decoded.userid
+    const tokenData = await getDataFromToken(request);
+    const userid = tokenData.userid
+
+    if (!userid) {
+      return NextResponse.json(
+        {
+          sucess: false,
+          message: "Invalid token or userid not found",
+          chats: []
+        }
+      );
+    }
 
     const user = await UserModel.findById(userid).populate("chats");
     if(!user){
@@ -27,10 +37,10 @@ export async function GET(request: NextRequest) {
       {
         sucess:true,
         message:"history retrived successfully",
-        chats:user?.chats
+        chats:user?.chats ||[]
       },
       {
-        status:404
+        status:201
       }
     )
     

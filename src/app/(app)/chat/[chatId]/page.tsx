@@ -1,4 +1,3 @@
-// app/chat/[chatId]/page.tsx
 "use client";
 
 import ChatBubble from "@/components/ChatBubble";
@@ -9,10 +8,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getHistoryChats, sendMessage } from "@/lib/ChatFunctions/api";
 import { useRouter } from "next/navigation";
 import PageLoaderComponent from "@/components/PageLoaderComponent";
+import { Menu } from "lucide-react";
+import SideBar from "@/components/SideBar";
+import { toast } from "sonner";
 
 const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   
   // Unwrap the params
@@ -24,8 +27,7 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
     queryKey: ["chats", paramChatId],
     queryFn: () => getHistoryChats(paramChatId),
     enabled: !!paramChatId && !isNewChat, // Don't fetch for "new" chat
-    retry:2,
-   
+    retry: 2,
   });
 
   // Mutation for sending a new message
@@ -42,6 +44,10 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
         behavior: 'smooth'
       });
     }
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   const handleSubmit = async (message: string) => {
@@ -120,32 +126,49 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   }, [messages.length]);
 
   // Skip loading state for new chats
-
-  if (isLoading && !isNewChat) return <PageLoaderComponent/>;
+  if (isLoading && !isNewChat) return <PageLoaderComponent />;
 
   return (
-    <div className="bg-white sm:h-screen sm:w-screen h-full w-full flex flex-col items-center gap-2 sm:gap-5">
-      <div
-        ref={chatContainerRef}
-        className="sm:h-160 sm:w-200 h-full w-full overflow-y-scroll flex flex-col gap-2 sm:gap-5 p-2 sm:p-5 relative"
-      >
-        {messages.length > 0 ? (
-          messages.map((message, index) => (
-            <ChatBubble 
-              key={index} 
-              content={message} 
-              error={mutation.error}
-              isLoading={mutation.isPending && index === messages.length - 1 && message.role === "model" && message.content === ""} 
-            />
-          ))
-        ) : (
-          <div className="text-center text-gray-500 py-10">
-            {isNewChat ? "Start a new conversation" : "No messages in this chat yet"}
-          </div>
-        )}
-      </div>
-      <div className="w-full p-2 sm:p-5">
-        <InputComponent onSendMessage={handleSubmit} />
+    <div className="bg-white h-screen w-screen flex relative overflow-hidden">
+      <SideBar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+      
+      <div className={`flex flex-col h-full w-full transition-all duration-300`}>
+        {/* Header with menu button */}
+        <div className="h-12 border-b flex items-center px-4">
+          <button 
+            className="p-2 rounded-full hover:bg-gray-100"
+            onClick={toggleSidebar}
+            aria-label="Toggle sidebar"
+          >
+            <Menu size={20} />
+          </button>
+        </div>
+        
+        {/* Chat messages container */}
+        <div 
+          className="flex-1 overflow-y-auto flex flex-col gap-5 p-4 scrollbar-thin"
+          ref={chatContainerRef}
+        >
+          {messages.length > 0 ? (
+            messages.map((message, index) => (
+              <ChatBubble 
+                key={index} 
+                content={message} 
+                error={mutation.error}
+                isLoading={mutation.isPending && index === messages.length - 1 && message.role === "model" && message.content === ""} 
+              />
+            ))
+          ) : (
+            <div className="text-center text-gray-500 py-10">
+              {isNewChat ? "Start a new conversation" : "No messages in this chat yet"}
+            </div>
+          )}
+        </div>
+        
+        {/* Input container */}
+        <div className="p-4 border-t">
+          <InputComponent onSendMessage={handleSubmit} />
+        </div>
       </div>
     </div>
   );

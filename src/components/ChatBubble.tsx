@@ -42,7 +42,7 @@ const ChatBubble: React.FC<Props> = ({ content, error, isLoading }) => {
       <div
         className={`rounded-lg p-3 break-words ${
           isUser
-            ? "bg-blue-600 text-white max-w-[80%] sm:max-w-md"
+            ? "bg-gray-800 text-white max-w-[80%] sm:max-w-md"
             : "text-black w-[90%] sm:w-full bg-zinc-100 sm:max-w-xxl"
         } relative`}
       >
