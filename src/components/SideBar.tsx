@@ -65,7 +65,7 @@ const SideBar = ({ isOpen, onToggle }: SideBarProps) => {
             chats.map((chat, idx) => (
               <div 
                 key={idx} 
-                className='h-10 w-full bg-zinc-800 px-2 py-2 rounded-xl text-white text-sm cursor-pointer hover:bg-zinc-700'
+                className='h-8 w-full bg-slate-950 px-2 py-1 rounded-sm text-zinc-100 text-sm font-semibold cursor-pointer hover:bg-zinc-700'
                 onClick={() => router.push(`/chat/${chat._id}`)}
               >
                 {chat?.title || "Untitled Chat"}
