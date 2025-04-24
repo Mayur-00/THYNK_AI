@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     username: existingUser.username,
   };
 
-  const token = jwt.sign(tokenObj,process.env.JWT_SECRET!, {expiresIn:"2d"} );
+  const token = jwt.sign(tokenObj,process.env.JWT_SECRET! );
 
 // response obj
     const response =  NextResponse.json(
@@ -70,7 +70,9 @@ export async function POST(request: NextRequest) {
     );
 
     response.cookies.set("token", token, {
-      httpOnly:true
+     maxAge: 7 * 24 * 60 * 60 * 1000,
+       httpOnly: true,
+       sameSite: "strict",
     });
 
     return response
@@ -88,3 +90,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

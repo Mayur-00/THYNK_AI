@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
   await dbConnect();
 
   try {
+
     const { username, email, password } = await request.json();
 
     // if check for empty request parameter
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
         username: savedUser.username,
       };
       // signing jwt
-      const token = jwt.sign(tokenObj,process.env.JWT_SECRET!, {expiresIn:"2d"} );
+      const token = jwt.sign(tokenObj,process.env.JWT_SECRET! );
 
       //response object
     const response = NextResponse.json(
@@ -69,7 +70,11 @@ export async function POST(request: NextRequest) {
       }
     );
     //cookie set
-    response.cookies.set("token", token);
+    response.cookies.set("token", token, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+       httpOnly: true,
+       sameSite: "strict",
+    });
 
     return response;
   } catch (error) {
