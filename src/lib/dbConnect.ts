@@ -11,7 +11,8 @@ export const dbConnect = async (): Promise<void> => {
     console.log("Already Connected!");
     return;
   }
-
+  await import('@/app/models/chat.model');
+  await import('@/app/models/user.model');
   try {
     const db = await mongoose.connect(process.env.MONGODB_URI || "", {});
     connection.isConnected = db.connections[0].readyState;

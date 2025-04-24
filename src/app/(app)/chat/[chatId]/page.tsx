@@ -26,7 +26,7 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   const { data: chatHistory, isLoading, error, isError } = useQuery({
     queryKey: ["chats", paramChatId],
     queryFn: () => getHistoryChats(paramChatId),
-    enabled: !!paramChatId && !isNewChat, // Don't fetch for "new" chat
+    enabled: !!paramChatId && paramChatId !=="new", // Don't fetch for "new" chat
     retry: 2,
   });
 

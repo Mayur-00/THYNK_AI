@@ -8,8 +8,7 @@ export async function GET(request: NextRequest) {
   await dbConnect();
   try {
     const tokenData = await getDataFromToken(request);
-    const userid = tokenData.userid
-
+    const userid = tokenData?.userid
     if (!userid) {
       return NextResponse.json(
         {

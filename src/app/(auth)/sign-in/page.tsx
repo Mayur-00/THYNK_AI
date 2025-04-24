@@ -42,7 +42,7 @@ const router = useRouter()
         mutationFn:signInState,
         onSuccess:()=>{
             toast.success("Signin sucess") 
-            router.replace("/chat") 
+            router.replace("/chat/new") 
         }
     })
 
