@@ -52,6 +52,14 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
 
   const handleSubmit = async (message: string) => {
     // Check if we're in the "new" chat page
+    const newUserMessage = {
+      role: "user",
+      content: message,
+    };
+
+    setMessages((prev) => [...prev, newUserMessage]);
+    setMessages((prev) => [...prev, { role: "model", content: "" }]);
+
     if (isNewChat) {
       // Create a new chat with this first message
       mutation.mutate(
@@ -77,10 +85,10 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
       };
       
       // Add user message
-      setMessages((prev) => [...prev, newUserMessage]);
+      
       
       // Add an empty model message as a placeholder for loading
-      setMessages((prev) => [...prev, { role: "model", content: "" }]);
+    
 
       // Scroll to bottom immediately when user sends a message
       setTimeout(scrollToBottom, 50);

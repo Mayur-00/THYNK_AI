@@ -12,6 +12,7 @@ export const dbConnect = async (): Promise<void> => {
     return;
   }
   await import('@/app/models/chat.model');
+  await import('@/app/models/project.model');
   await import('@/app/models/user.model');
   try {
     const db = await mongoose.connect(process.env.MONGODB_URI || "", {});

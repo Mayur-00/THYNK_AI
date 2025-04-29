@@ -2,13 +2,14 @@ import ChatModel from "@/app/models/chat.model";
 import UserModel from "@/app/models/user.model";
 import { getDataFromToken } from "@/helper/getDataFromToken";
 import { dbConnect } from "@/lib/dbConnect";
+import { JwtPayload } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   await dbConnect();
   try {
     const tokenData = await getDataFromToken(request);
-    const userid = tokenData?.userid
+    const userid = (tokenData as JwtPayload).userid;
     if (!userid) {
       return NextResponse.json(
         {

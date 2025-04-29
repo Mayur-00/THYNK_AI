@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
 import { X } from 'lucide-react';
+import ProjectSection from './ProjectSection';
 
 interface SideBarProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ const SideBar = ({ isOpen, onToggle }: SideBarProps) => {
   };
 
   return (
-    <div className={`h-screen bg-zinc-100 fixed top-0 left-0 z-10 transition-all duration-300 flex flex-col items-center ${isOpen ? "w-[250px]" : "w-0"} overflow-hidden`}>
+    <div className={`h-screen bg-zinc-100 fixed top-0 left-0 z-10 transition-all duration-300 flex flex-col items-center ${isOpen ? "w-[250px]" : "w-0"} overflow-y-auto overflow-x-hidden scrollbar-none`}>
       <div className='w-full h-[30%] p-2 flex flex-col gap-10 relative'>
         <div className="flex justify-between items-center">
           <button className='font-bold text-xl h-10'>THYNK</button>
@@ -52,7 +53,8 @@ const SideBar = ({ isOpen, onToggle }: SideBarProps) => {
           New Chat
         </button>
       </div>
-      <div className='w-full h-[70%] p-2'>
+     <ProjectSection/>
+      <div className='w-full h-[40%] p-2 shrink-'>
         <span className="font-medium">Recents</span>
         <div id='sidebar-part-2-overflow-div' className='h-[94%] w-full flex flex-col p-2 gap-2 overflow-y-scroll scrollbar-thin'>
           {isLoading ? (
@@ -65,7 +67,7 @@ const SideBar = ({ isOpen, onToggle }: SideBarProps) => {
             chats.map((chat, idx) => (
               <div 
                 key={idx} 
-                className='h-8 w-full bg-slate-950 px-2 py-1 rounded-sm text-zinc-100 text-sm font-semibold cursor-pointer hover:bg-zinc-700'
+                className='h-8 w-full  px-2 py-1 rounded-sm text-black text-sm hover:text-white font-semibold cursor-pointer hover:bg-zinc-700'
                 onClick={() => router.push(`/chat/${chat._id}`)}
               >
                 {chat?.title || "Untitled Chat"}

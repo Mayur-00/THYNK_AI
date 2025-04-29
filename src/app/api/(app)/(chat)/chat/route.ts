@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import {  ChatRequest } from "@/app/types/chat";
-import { run } from "../../lib/ai";
+import { run } from "@/app/api/lib/ai";
 import ChatModel from "@/app/models/chat.model";
 import { getDataFromToken } from "@/helper/getDataFromToken";
 import mongoose, { Schema } from "mongoose";
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     } else {
       chat = await ChatModel.create({
         userId: userid,
-        title: message.substring(0, 30) + (message.length > 30 ? "..." : ""),
+        title: message.substring(0, 20) + (message.length > 20 ? "..." : ""),
         messages: [
           { role: "user", content: message },
           { role: "model", content: result || "No response available" },

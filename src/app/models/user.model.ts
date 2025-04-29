@@ -9,6 +9,7 @@ export interface User extends Document{
     verifyCode:string,
     verifyCodeExpiry:Date,
     chats: mongoose.Types.ObjectId[]; 
+    projects:mongoose.Types.ObjectId[];
 
 
 };
@@ -28,7 +29,8 @@ const userSchema:Schema<User> = new Schema(
             required:[true, "password is required"]
         },
        
-        chats:[{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }]
+        chats:[{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
+        projects:[{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }]
        
     },
     {

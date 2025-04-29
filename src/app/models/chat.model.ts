@@ -10,7 +10,8 @@ export interface Ichat extends Document{
             role:string,
             content:string
         },
-    ]
+    ],
+    projectid?:mongoose.Types.ObjectId
    
     
 };
@@ -21,7 +22,8 @@ export interface Imessage extends Document{
 }
 
 
-const chatSchema: Schema<Ichat> = new Schema({
+const chatSchema: Schema<Ichat> = new Schema(
+    {
     userId:{
         type:Schema.Types.ObjectId,
         ref:"User",
@@ -36,7 +38,12 @@ const chatSchema: Schema<Ichat> = new Schema({
             role:String,
             content:String
         },
-    ]
+    ],
+    projectid:{
+        type:Schema.Types.ObjectId,
+        ref:"Project"
+
+    }
     
 },
 {

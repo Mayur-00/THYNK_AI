@@ -21,7 +21,7 @@ const InputComponent:React.FC<Props> = ({onSendMessage}) => {
   }
 
   return (
-    <div className=" h-20 w-90  sm:h-20 sm:w-150 rounded-xl bg-black fixed sm:left-100 left-5 bottom-1 z-99 mb-5 flex  overflow-hidden p-1">
+    <div className=" h-20 w-90  sm:h-20 sm:w-150 rounded-xl bg-black fixed sm:left-100 left-5 bottom-1 z-9 mb-5 flex  overflow-hidden p-1">
       <textarea
         className="h-full w-130 resize-none  text-white outline-none p-2"
         placeholder="Ask Anything ..."
