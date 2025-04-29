@@ -41,7 +41,7 @@ const router = useRouter()
         mutationFn:signUpState,
         onSuccess:()=>{
             toast.success("Signup sucess") 
-            router.replace("/chat") 
+            router.replace("/chat/new") 
         }
     })
 
@@ -56,9 +56,9 @@ const router = useRouter()
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Join Mystery Message
+            Try THINK
           </h1>
-          <p className="mb-4">Sign up to start your anonymus adventure</p>
+          <p className="mb-4">Sign up to start thinking with THINK</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onsubmit)} className="space-y-6">
@@ -70,13 +70,13 @@ const router = useRouter()
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="UserName"
+                      placeholder="Username"
                       {...field}
                      
                       
                     />
                   </FormControl>
-                   //
+                 
                   <FormDescription>
                     This is your public display name.
                   </FormDescription>
