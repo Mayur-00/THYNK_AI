@@ -42,13 +42,13 @@ const ChatBubble: React.FC<Props> = ({ content, error, isLoading }) => {
       <div
         className={`rounded-lg p-3 break-words ${
           isUser
-            ? "bg-gray-800 text-white max-w-[80%] sm:max-w-md"
-            : "text-black w-[90%] sm:w-full bg-zinc-100 sm:max-w-xxl"
+            ? "bg-gray-600 text-white max-w-[80%] sm:max-w-md"
+            : "text-black dark:text-white dark:bg-zinc-900 w-[90%] sm:w-full bg-zinc-200 sm:max-w-xxl"
         } relative`}
       >
         {isLoadingBubble ? (
           <div className="flex space-x-2 items-center p-2">
-            <div className="text-gray-500"> THYNKING</div>
+            <div className="text-gray-500 dark:text-gray-300"> THYNKING</div>
             <div className="flex space-x-1">
               {[0, 1, 2].map((index) => (
                 <div 
@@ -67,7 +67,7 @@ const ChatBubble: React.FC<Props> = ({ content, error, isLoading }) => {
                 
                 return match ? (
                   <>
-                    <div className="w-full text-gray-300 bg-[#282A36] mb-[1px] px-4 py-1 rounded-sm ">
+                    <div className="w-full text-gray-300 dark:text-gray-100 dark:bg- bg-[#282A36] mb-[3px] px-4  py-1 rounded-sm ">
                       {match[1]}
                     </div>
                     <div className="relative" ref={codeBlockRef}>
@@ -81,7 +81,7 @@ const ChatBubble: React.FC<Props> = ({ content, error, isLoading }) => {
                       </SyntaxHighlighter>
                       <button
                         onClick={handleCopyToClipboard}
-                        className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 text-white rounded-md p-1 hover:bg-opacity-70 focus:outline-none cursor-pointer"
+                        className="absolute top-2 right-2 bg-[#282A36] bg-opacity-50 text-white rounded-md p-1 hover:bg-opacity-70 focus:outline-none cursor-pointer"
                       >
                         {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </button>

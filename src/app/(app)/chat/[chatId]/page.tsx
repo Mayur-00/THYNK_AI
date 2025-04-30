@@ -11,6 +11,7 @@ import PageLoaderComponent from "@/components/PageLoaderComponent";
 import { Menu } from "lucide-react";
 import SideBar from "@/components/SideBar";
 import { toast } from "sonner";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -137,19 +138,20 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
   if (isLoading && !isNewChat) return <PageLoaderComponent />;
 
   return (
-    <div className="bg-white h-screen w-screen flex relative overflow-hidden">
+    <div className="bg-white dark:bg-zinc-900 h-screen w-screen flex relative overflow-hidden">
       <SideBar isOpen={sidebarOpen} onToggle={toggleSidebar} />
       
       <div className={`flex flex-col h-full w-full transition-all duration-300`}>
         {/* Header with menu button */}
-        <div className="h-12 border-b flex items-center px-4">
+        <div className="h-12 border-b flex justify-between  items-center px-5">
           <button 
-            className="p-2 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-full hover:bg-gray-700"
             onClick={toggleSidebar}
             aria-label="Toggle sidebar"
           >
             <Menu size={20} />
           </button>
+          <ThemeToggle/>
         </div>
         
         {/* Chat messages container */}
@@ -167,7 +169,7 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
               />
             ))
           ) : (
-            <div className="text-center text-gray-500 py-10">
+            <div className="text-center text-gray-500 dark:text-gray-300 py-10">
               {isNewChat ? "Start a new conversation" : "No messages in this chat yet"}
             </div>
           )}

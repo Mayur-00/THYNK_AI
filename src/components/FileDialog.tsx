@@ -70,12 +70,12 @@ const FileDialog = ({projectid, onClose}:FileDialogProps) => {
 
   return (
     <div className='h-full w-full bg-black/50 fixed inset-0 flex justify-center items-center '>
-        <div className='h-130 w-150 bg-white rounded shadow-lg shadow-black flex flex-col items-center p-2 '>
+        <div className='h-130 w-150 bg-white dark:bg-zinc-600 rounded shadow-lg shadow-black dark:shadow-zinc-900 flex flex-col items-center p-2 '>
             <h1 className='font-semibold '>Add Chats To Project</h1>
            
             <div className='h-[85%] w-full  flex flex-col p-2 gap-2 overflow-y-auto border border-black rounded-sm '>
                 {chats.map((chat)=>(
-                    <div key={chat._id} className="flex items-center py-2 bg-zinc-300 hover:bg-zinc-400 p-2 rounded-sm ">
+                    <div key={chat._id} className="flex items-center py-2 bg-zinc-300 dark:bg-zinc-400 dark:hover:bg-zinc-300  hover:bg-zinc-400 p-2 rounded-sm ">
                     <input
                       type="checkbox"
                       id={`chat-${chat._id}`}
@@ -83,7 +83,7 @@ const FileDialog = ({projectid, onClose}:FileDialogProps) => {
                       onChange={() => handleCheckBoxChange(chat._id)}
                       className="h-4 w-4 text-blue-600 border-gray-300   rounded focus:ring-blue-500"
                     />
-                    <label htmlFor={`chat-${chat._id}`} className="ml-2 text-gray-700 cursor-pointer">
+                    <label htmlFor={`chat-${chat._id}`} className="ml-2 text-black  cursor-pointer">
                       {chat.title}
                     </label>
                   </div>

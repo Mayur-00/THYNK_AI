@@ -58,13 +58,13 @@ const CreateProjectComponent = ({ isOpen, onClose}: CreateProjectProps) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
-      <div className="w-2/5 bg-white rounded-md shadow-lg flex flex-col p-4 relative">
+      <div className="w-2/5 bg-white dark:bg-zinc-600 text-black dark:text-white rounded-md shadow-lg flex flex-col p-4 relative">
         {/* Header with close button */}
         <div className="flex justify-between items-center mb-4">
           <p className="text-lg font-semibold">Create New Project</p>
           <button 
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-full"
+            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-500 rounded-full"
           >
             <X size={18} />
           </button>
@@ -107,7 +107,7 @@ const CreateProjectComponent = ({ isOpen, onClose}: CreateProjectProps) => {
             className={`px-4 py-2 rounded font-medium ${
               projectName.trim() && selectedColor
                 ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-gray-300 dark:bg-white dark:text-black text-gray-500 cursor-not-allowed'
             }`}
           >
             Create Project
