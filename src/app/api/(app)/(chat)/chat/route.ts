@@ -11,6 +11,7 @@ import { dbConnect } from "@/lib/dbConnect";
 import { JwtPayload } from "jsonwebtoken";
 
 export async function POST(request: NextRequest) {
+
   await dbConnect()
   try {
     const {
@@ -18,6 +19,7 @@ export async function POST(request: NextRequest) {
       history,
       chatId,
     } = (await request.json()) as ChatRequest;
+
 
     const decoded = await getDataFromToken(request);
     const userid = (decoded as JwtPayload).userid;
@@ -27,7 +29,6 @@ export async function POST(request: NextRequest) {
     console.log("history update");
 
     const result = await run({ role: "user", content: message }, history);
-    console.log(result);
 
     let chat;
     let updatedUser;
@@ -75,7 +76,6 @@ export async function POST(request: NextRequest) {
       allchatHistory:updatedUser?.chats
     });
   } catch (error) {
-    console.error("Error:", error);
     return NextResponse.json(
       { error: "Failed to process your request" },
       { status: 500 }

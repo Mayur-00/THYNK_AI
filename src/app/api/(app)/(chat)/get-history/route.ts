@@ -30,9 +30,6 @@ export async function GET(request: NextRequest) {
         }
       )
     }
-    //TODO:remove log
-    console.log(user?.chats);
-
     return NextResponse.json(
       {
         sucess:true,
@@ -45,7 +42,6 @@ export async function GET(request: NextRequest) {
     )
     
   } catch (error:any) {
-    console.log("error in get history function", error);
     return NextResponse.json(
       {
         sucess:false,

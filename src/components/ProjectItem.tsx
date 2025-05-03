@@ -49,9 +49,9 @@ const ProjectItem = ({ project }: Props) => {
       {showFileDialog && (
         <FileDialog projectid={project._id} onClose={onCloseFileDialog} />
       )}
-      <div className="p-1 transition-all duration-500 overflow-auto flex flex-col w-[85%] ml-5">
+      <div className="p-1 transition-all duration-500 overflow-auto flex flex-col w-[85%] ml-5 shrink-0">
         <div
-          className={`px-3 py-1 rounded font-medium text-white cursor-pointer flex justify-between ${project.color}`}
+          className={`px-3 py-1 rounded font-medium text-white cursor-pointer flex justify-between shrink-0 text-sm ${project.color}`}
           onClick={handleChatExpansion}
           onMouseEnter={() => setViewDots(true)}
           onMouseLeave={() => setViewDots(false)}

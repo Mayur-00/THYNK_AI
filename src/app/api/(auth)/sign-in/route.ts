@@ -13,11 +13,10 @@ export async function POST(request: NextRequest) {
 
     // if check for empty request parameter
     if (!email || !password) {
-      console.log("All the Paremeters are required!");
       return NextResponse.json(
         {
           success: false,
-          message: "All the Paremeters are required!",
+          message: "All Paremeters are required!",
         },
         { status: 400 }
       );
@@ -27,7 +26,6 @@ export async function POST(request: NextRequest) {
     const existingUser = await UserModel.findOne({ email: email });
 
     if (!existingUser) {
-      console.log("user not found");
       return NextResponse.json(
         {
           success: false,
@@ -77,8 +75,6 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error) {
-    console.log("error in signin function", error);
-
     return NextResponse.json(
       {
         message: "An Error Occured while signining in",

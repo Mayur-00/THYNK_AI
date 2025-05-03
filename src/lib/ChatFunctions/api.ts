@@ -5,10 +5,10 @@ import axios from "axios"
  export const getHistory = async ()=>{
     try {
     const res = await axios.get("/api/get-history");
-    console.log("success", res.data)
     return res.data.chats
     } catch (error) {
         console.log("an error in get history", error)
+        
     }
  };
 

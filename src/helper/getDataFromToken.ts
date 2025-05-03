@@ -12,7 +12,6 @@ console.log
     }
 
     const decoded = jwt.verify(token, secret);
-    console.log(decoded)
     return decoded;
   } catch (error: any) {
     console.log(error)

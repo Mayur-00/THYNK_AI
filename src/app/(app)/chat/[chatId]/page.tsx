@@ -29,7 +29,9 @@ const Page = ({ params }: { params: Promise<{ chatId: string }> }) => {
     queryFn: () => getHistoryChats(paramChatId),
     enabled: !!paramChatId && paramChatId !=="new", // Don't fetch for "new" chat
     retry: 2,
+
   });
+
 
   // Mutation for sending a new message
   const mutation = useMutation({

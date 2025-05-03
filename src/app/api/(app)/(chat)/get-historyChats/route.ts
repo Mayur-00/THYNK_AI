@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const chatid = url.searchParams.get("chatid")
-    console.log("chatid", chatid);
     
     if (!chatid) {
       return NextResponse.json({
@@ -48,7 +47,6 @@ export async function GET(request: NextRequest) {
 );
     
   } catch (error:any) {
-    console.log("error in get history chats function", error);
     return NextResponse.json({
         sucess: false,
         message:error.message || "internal server error",
